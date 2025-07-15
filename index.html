@@ -35,7 +35,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: #FFA500; /* 橙色文字 */
+            color: #FFFFFF; /* 修改为纯白色文字 */
             font-size: 14px;
             padding: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -45,11 +45,11 @@
         .love-bubble::after {
             content: '';
             position: absolute;
-            bottom: -15px;
+            bottom: -30px;
             left: 50%;
             transform: translateX(-50%);
             width: 2px;
-            height: 30px;
+            height: 60px;
             background: linear-gradient(to bottom,
             rgba(255, 192, 203, 0.8),
             rgba(255, 255, 255, 0.5));
@@ -166,21 +166,19 @@
     <!-- 情话气泡容器 -->
     <div id="bubble-container"></div>
 
-    <!-- 照片元素 -->
-    <div class="photo" id="photo1" style="background-image: url('photos/1.jpg'); z-index: 1;"></div>
-    <div class="photo" id="photo2" style="background-image: url('photos/2.jpg'); z-index: 2;"></div>
-    <div class="photo" id="photo3" style="background-image: url('photos/3.jpg'); z-index: 3;"></div>
-    <div class="photo" id="photo4" style="background-image: url('photos/4.jpg'); z-index: 4;"></div>
-    <div class="photo" id="photo5" style="background-image: url('photos/5.jpg'); z-index: 5;"></div>
-    <div class="photo" id="photo6" style="background-image: url('photos/6.jpg'); z-index: 6;"></div>
-    <div class="photo" id="photo7" style="background-image: url('photos/7.jpg'); z-index: 7;"></div>
-    <div class="photo" id="photo8" style="background-image: url('photos/8.jpg'); z-index: 8;"></div>
-    <div class="photo" id="photo9" style="background-image: url('photos/9.jpg'); z-index: 9;"></div>
-    <div class="photo" id="photo10" style="background-image: url('photos/10.jpg'); z-index: 10;"></div>
-    <div class="photo" id="photo11" style="background-image: url('photos/11.jpg'); z-index: 11;"></div>
-    <div class="photo" id="photo12" style="background-image: url('photos/12.jpg'); z-index: 12;"></div>
-    <div class="photo" id="photo13" style="background-image: url('photos/13.jpg'); z-index: 13;"></div>
-    <div class="photo" id="photo14" style="background-image: url('photos/14.jpg'); z-index: 14;"></div>
+    <!-- 照片元素改为循环生成 -->
+    <script>
+        // 生成91个照片元素
+        const photoContainer = document.querySelector('.photo-container');
+        for (let i = 1; i <= 91; i++) {
+            const photoDiv = document.createElement('div');
+            photoDiv.className = 'photo';
+            photoDiv.id = `photo${i}`;
+            photoDiv.style.backgroundImage = `url('photos/${i}.jpg')`;
+            photoDiv.style.zIndex = i;
+            photoContainer.appendChild(photoDiv);
+        }
+    </script>
 </div>
 
 <script>
@@ -205,7 +203,27 @@
         "想你的时候，我会仰望天空，想象你在身边。",
         "有你在的地方，就有幸福的气息。",
         "你是我的梦中情人，现实中的挚爱。",
-        "只要能和你在一起，我就无所畏惧。"
+        "只要能和你在一起，我就无所畏惧。",
+        "你是我生命的全部意义，每一刻与你共度的时光都是永恒。",
+        "在浩瀚宇宙中，我只为你闪耀；在这无尽星河里，我只愿与你同行。",
+        "你的微笑是我每天最渴望看到的风景，你的声音是我每夜最想听到的旋律。",
+        "即使世界末日来临，我也会紧紧握住你的手，与你一同面对最后的时刻。",
+        "你是我的唯一，就像星辰离不开夜空，就像花朵离不开春天。",
+        "遇见你之前，我的世界是黑白的；遇见你之后，我的世界变得五彩斑斓。",
+        "我想和你一起走过每一个春夏秋冬，让岁月见证我们的爱情。",
+        "你的眼睛像星星一样明亮，照亮了我内心最深处的幸福。",
+        "无论未来路有多长，我都愿意牵着你的手，永不放开。",
+        "你是我心中的完美，比所有诗篇中的浪漫还要动人。",
+        "我想把整个宇宙最闪亮的星星都摘下来送给你，因为你是我的星辰大海。",
+        "在你怀里，我找到了世界上最温暖的港湾。",
+        "每一次呼吸都在想着你，每一滴血液都在呼唤着你。",
+        "如果有来生，我还想再次遇见你，再次爱上你。",
+        "你是我心中永远的女神，是我此生最美的邂逅。",
+        "我可以为你忘记所有烦恼，因为你就是我最好的避风港。",
+        "爱你一万年不变，哪怕命运让我们暂时分开，我的心也永远属于你。",
+        "就算时光老去，我也要拉着你的手，一起走到世界的尽头。",
+        "你是我梦中最美的风景，是我醒时最大的幸福。",
+        "我要用一生的时间证明，我对你的爱永远不会改变。"
     ];
 
     // 创建情话气泡优化 - 修改为水泡样式

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>小天使</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      width: 100%;
+    }
+
+    /* 立方体容器 */
+    .cube-container {
+      width: 500px;
+      height: 500px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      perspective: 1200px;
+      cursor: pointer;
+      transform-style: preserve-3d; /* 新增此行以确保3D变换生效 */
+    }
+
+    /* 立方体结构 */
+    .cube {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      animation: rotateCube 10s infinite linear; /* 已恢复为原始速度 */
+    }
+
+    /* 每个面样式 */
+      .face {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.3); /* 降低背景透明度至0.3 */
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 
+          0 0 30px rgba(255, 255, 255, 0.7),
+          inset 0 0 30px rgba(255, 255, 255, 0.5);
+        line-height: 500px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        transition: all 0.5s ease; /* 延长过渡时间至0.5秒 */
+      }
+
+      /* 图片覆盖在每个面上 */
+      .face img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0;
+        opacity: 0.5; /* 默认透明度增加到0.5 */
+        filter: brightness(1.0) contrast(1.0);
+        transition: all 0.5s ease; /* 延长过渡时间至0.5秒 */
+      }
+
+      /* 当立方体旋转到正面时突出显示图片 */
+      .cube:hover .face {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .cube:hover .face img {
+        opacity: 0.5; /* 保持非正面图片透明度 */
+        filter: brightness(1.0) contrast(1.0);
+      }
+      
+      /* 优化正面图片显示效果 */
+      .cube .face img {
+        opacity: 0.5;
+      }
+      .cube .face.front img {
+        opacity: 1; /* 正面图片透明度为1 */
+        filter: brightness(1.3) contrast(1.2); /* 提高正面图片亮度和对比度 */
+        box-shadow: 0 0 30px rgba(255,255,255,0.8); /* 添加光晕效果 */
+      }
+
+      /* 悬停效果优化 */
+      .face:hover img {
+        opacity: 0.7; /* 悬停时微调透明度 */
+        filter: brightness(1.1);
+      }
+      .face.front:hover img {
+        opacity: 1; /* 正面图片悬停时保持完全不透明 */
+        filter: brightness(1.5) contrast(1.3); /* 进一步提高亮度和对比度 */
+      }
+
+      /* 各个面位置定义 */
+      .front  { transform: translateZ(250px); }
+      .back   { transform: rotateY(180deg) translateZ(250px); }
+      .right  { transform: rotateY(90deg) translateZ(250px); }
+      .left   { transform: rotateY(-90deg) translateZ(250px); }
+      .top    { transform: rotateX(90deg) translateZ(250px); }
+      .bottom { transform: rotateX(-90deg) translateZ(250px); }
+
+      /* 优化后的9个中间面 */
+      .middle1 { transform: rotateY(45deg) rotateX(0deg) translateZ(250px); }
+      .middle2 { transform: rotateY(90deg) rotateX(45deg) translateZ(250px); }
+      .middle3 { transform: rotateY(135deg) rotateX(0deg) translateZ(250px); }
+      .middle4 { transform: rotateY(180deg) rotateX(45deg) translateZ(250px); }
+      .middle5 { transform: rotateY(225deg) rotateX(0deg) translateZ(250px); }
+      .middle6 { transform: rotateY(270deg) rotateX(45deg) translateZ(250px); }
+      .middle7 { transform: rotateY(315deg) rotateX(0deg) translateZ(250px); }
+      .middle8 { transform: rotateY(0deg) rotateX(45deg) translateZ(250px); }
+      .middle9 { transform: rotateY(0deg) rotateX(-45deg) translateZ(250px); }
+
+      /* 立方体旋转动画 */
+      @keyframes rotateCube {
+        from { transform: rotateX(0deg) rotateY(0deg); }
+        to   { transform: rotateX(360deg) rotateY(360deg); }
+      }
+
+      /* 气泡样式 */
+      .bubble-message {
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        bottom: 30px;
+        background-color: #fefefe;
+        padding: 15px 25px;
+        border-radius: 50%; /* 圆形 */
+        border: 1px solid #888;
+        animation: bubbleUp 2s ease-out forwards;
+        transform: translateX(-50%) scale(0.5);
+        transform-origin: center;
+        font-size: 16px;
+        color: #333;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        font-style: italic;
+      }
+
+      /* 气球样式 */
+      .balloon {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 105, 180, 0.6), rgba(255, 192, 203, 0.4)); /* 降低透明度 */
+        z-index: 1000;
+        cursor: pointer;
+        animation: floatUp 4s ease-in forwards;
+        box-shadow: 
+          0 0 15px rgba(255, 105, 180, 0.7), /* 降低阴影透明度 */
+          inset 0 0 25px rgba(255, 192, 203, 0.5); /* 降低内阴影透明度 */
+        border: 1px solid rgba(255, 105, 180, 0.5); /* 降低边框透明度 */
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* 修正波浪尾巴样式 */
+      .balloon .tail {
+        position: absolute;
+        bottom: -40px;  /* 加长尾巴 */
+        left: 29px;     /* 调整位置居中 */
+        width: 2px;     /* 改为细线 */
+        height: 40px;   /* 加长尾巴 */
+        background: inherit;
+        transform: none; /* 移除波浪形变换 */
+        filter: blur(1px);
+        opacity: 0.7;
+        z-index: -1;
+        border-radius: 0; /* 改为直线 */
+        animation: none;  /* 移除波浪动画 */
+      }
+
+      /* 气球文字样式 */
+      .balloon-text {
+        display: none;
+        position: absolute;
+        transform: rotate(45deg);
+        width: 200px;
+        text-align: center;
+        font-size: 12px;
+        color: white;
+        text-shadow: 0 0 3px rgba(0,0,0,0.5);
+      }
+
+      @keyframes wave {
+        0%, 100% { transform: rotate(45deg) scaleY(1.5) skewX(10deg); }
+        50% { transform: rotate(45deg) scaleY(1.5) skewX(-10deg); }
+      }
+
+      /* 气球上浮动画 */
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh);
+          opacity: 0;
+        }
+      }
+
+      /* 烟花效果 */
+      .firework {
+        position: fixed;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.8);
+        animation: explode 0.8s ease-out forwards;
+        z-index: 1001;
+        background: transparent !important;
+      }
+
+      @keyframes explode {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+          box-shadow: 0 0 10px 3px currentColor;
+        }
+        50% {
+          transform: scale(2);
+          box-shadow: 0 0 15px 5px currentColor;
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(30);
+          box-shadow: 0 0 20px 8px currentColor;
+          opacity: 0;
+        }
+      }
+
+      /* 气球爆炸效果修改为文字淡出 */
+      @keyframes fadeOut {
+        0% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+
+/* 新增球形面样式 */
+.sphere-face {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  line-height: 500px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+
+/* 球体旋转动画 */
+@keyframes rotateSphere {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to   { transform: rotateX(360deg) rotateY(360deg); }
+}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>多面魔方水晶球</h1>
+
+  <div class="cube-container">
+    <div class="cube" id="photoCube">
+      <!-- 前 -->
+      <div class="face front"><img src="angel1/1.jpg" alt=""></div>
+      <!-- 后 -->
+      <div class="face back"><img src="angel1/2.jpg" alt=""></div>
+      <!-- 右 -->
+      <div class="face right"><img src="angel1/3.jpg" alt=""></div>
+      <!-- 左 -->
+      <div class="face left"><img src="angel1/4.jpg" alt=""></div>
+      <!-- 上 -->
+      <div class="face top"><img src="angel1/5.jpg" alt=""></div>
+      <!-- 下 -->
+      <div class="face bottom"><img src="angel1/6.jpg" alt=""></div>
+      <!-- 新增的8个中间面 -->
+      <div class="face middle1"><img src="angel1/7.jpg" alt=""></div>
+      <div class="face middle2"><img src="angel1/8.jpg" alt=""></div>
+      <div class="face middle3"><img src="angel1/9.jpg" alt=""></div>
+      <div class="face middle4"><img src="angel1/10.jpg" alt=""></div>
+      <div class="face middle5"><img src="angel1/11.jpg" alt=""></div>
+      <div class="face middle6"><img src="angel1/12.jpg" alt=""></div>
+      <div class="face middle7"><img src="angel1/13.jpg" alt=""></div>
+      <div class="face middle8"><img src="angel1/14.jpg" alt=""></div>
+      <div class="face middle9"><img src="angel1/15.jpg" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 情话列表
+  const loveQuotes = [
+    "你是我生命的全部意义。",
+    "在这个世界上，除了你，我谁都不想要。",
+    "你的微笑照亮了我的世界。",
+    "我想和你一起走过每一个春夏秋冬。",
+    "你是我的唯一，永远不变。",
+    "每当我看到你，我的心都会跳动得更快。",
+    "我喜欢你，不是因为你是谁，而是因为在你面前我可以做自己。",
+    "即使在最黑暗的时刻，你也是我心中的光芒。",
+    "我愿意用一生去守护这份爱。",
+    "你就是我想要共度余生的那个人。",
+    "我爱你，从第一眼看见你到现在一直如此。",
+    "与你相遇是我生命中最美的意外。",
+    "没有你的日子就像失去了阳光。",
+    "你让我的生活变得丰富多彩。",
+    "我愿意为你放弃一切。",
+    "你是我心中的最美的风景。",
+    "想你的时候，我会仰望天空，想象你在身边。",
+    "有你在的地方，就有幸福的气息。",
+    "你是我的梦中情人，现实中的挚爱。",
+    "只要能和你在一起，我就无所畏惧。",
+    "你是我生命的全部意义，每一刻与你共度的时光都是永恒。",
+    "在浩瀚宇宙中，我只为你闪耀；在这无尽星河里，我只愿与你同行。",
+    "你的微笑是我每天最渴望看到的风景，你的声音是我每夜最想听到的旋律。",
+    "即使世界末日来临，我也会紧紧握住你的手，与你一同面对最后的时刻。",
+    "你是我的唯一，就像星辰离不开夜空，就像花朵离不开春天。",
+    "遇见你之前，我的世界是黑白的；遇见你之后，我的世界变得五彩斑斓。",
+    "我想和你一起走过每一个春夏秋冬，让岁月见证我们的爱情。",
+    "你的眼睛像星星一样明亮，照亮了我内心最深处的幸福。",
+    "无论未来路有多长，我都愿意牵着你的手，永不放开。",
+    "你是我心中的完美，比所有诗篇中的浪漫还要动人。",
+    "我想把整个宇宙最闪亮的星星都摘下来送给你，因为你是我的星辰大海。",
+    "在你怀里，我找到了世界上最温暖的港湾。",
+    "每一次呼吸都在想着你，每一滴血液都在呼唤着你。",
+    "如果有来生，我还想再次遇见你，再次爱上你。",
+    "你是我心中永远的女神，是我此生最美的邂逅。",
+    "我可以为你忘记所有烦恼，因为你就是我最好的避风港。",
+    "爱你一万年不变，哪怕命运让我们暂时分开，我的心也永远属于你。",
+    "就算时光老去，我也要拉着你的手，一起走到世界的尽头。",
+    "你是我梦中最美的风景，是我醒时最大的幸福。",
+    "我要用一生的时间证明，我对你的爱永远不会改变。"
+  ];
+  // 对象池实现
+  const balloonPool = [];
+  const fireworkPool = [];
+  
+  // 获取可重用气球
+  function getBalloonFromPool() {
+    for (let i = 0; i < balloonPool.length; i++) {
+      if (!balloonPool[i].parentNode) {
+        return balloonPool[i];
+      }
+    }
+    const balloon = document.createElement('div');
+    balloon.className = 'balloon';
+    balloonPool.push(balloon);
+    return balloon;
+  }
+
+  // 获取可重用烟花
+  function getFireworkFromPool() {
+    for (let i = 0; i < fireworkPool.length; i++) {
+      if (!fireworkPool[i].parentNode) {
+        return fireworkPool[i];
+      }
+    }
+    const firework = document.createElement('div');
+    firework.className = 'firework';
+    fireworkPool.push(firework);
+    return firework;
+  }
+
+  // 创建气球（优化版）
+  function createBalloon(e) {
+    const balloon = getBalloonFromPool();
+    
+    // 设置气球位置和样式
+    balloon.style.left = `${e.clientX - 30}px`;
+    balloon.style.bottom = `${window.innerHeight - e.clientY}px`;
+    const colors = [
+      'rgba(255, 105, 180, 0.8)', // 粉色
+      'rgba(255, 20, 147, 0.8)',  // 深粉色
+      'rgba(219, 112, 147, 0.8)', // 淡紫色
+      'rgba(199, 21, 133, 0.8)',  // 紫红色
+      'rgba(255, 0, 127, 0.8)',   // 玫瑰红
+      'rgba(255, 215, 0, 0.8)',   // 金色
+      'rgba(0, 191, 255, 0.8)',   // 天蓝色
+      'rgba(50, 205, 50, 0.8)',   // 青绿色
+      'rgba(138, 43, 226, 0.8)'   // 紫罗兰色
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    balloon.style.background = `radial-gradient(circle at 30% 30%, ${color}, rgba(255, 255, 255, 0.6))`;
+    
+    // 添加情话文字
+    const quote = loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
+    balloon.innerHTML = `<div class="balloon-text">${quote}</div><div class="tail"></div>`;
+    
+    document.body.appendChild(balloon);
+    balloon.style.animation = 'floatUp 4s ease-in forwards';
+    
+    balloon.onclick = function(e) {
+      e.stopPropagation(); // 阻止事件冒泡
+      explodeBalloon(balloon);
+    };
+  }
+
+  // 气球爆炸效果（简化版）
+  function explodeBalloon(balloon) {
+    // 显示文字
+    const text = balloon.querySelector('.balloon-text');
+    if (text) {
+      text.style.display = 'block';
+      text.style.animation = 'fadeOut 3s forwards';
+    }
+    
+    // 移除气球
+    setTimeout(() => {
+      balloon.style.animation = 'none';
+      balloon.remove();
+    }, 3000); // 3秒后移除气球
+  }
+
+  // 点击节流控制
+  let lastClickTime = 0;
+  window.onload = () => {
+    // 初始气球数量减少为10个
+    for (let i = 0; i < 10; i++) {
+      setTimeout(() => {
+        createBalloon({
+          clientX: Math.random() * window.innerWidth,
+          clientY: window.innerHeight
+        });
+      }, i * 1000);
+    }
+
+    document.addEventListener('click', (e) => {
+      // 只有当点击的对象是body或容器时才创建气球
+      if (e.target === document.body || e.target.classList.contains('container')) {
+        const now = Date.now();
+        if (now - lastClickTime > 300) { // 300ms节流控制
+          createBalloon(e);
+          lastClickTime = now;
+        }
+      }
+    });
+  };
+</script>
+</body>
+</html>
