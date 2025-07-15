@@ -219,13 +219,13 @@
 
     <!-- 照片元素改为循环生成 -->
     <script>
-        // 生成90个照片元素
+        // 生成19个照片元素
         const photoContainer = document.querySelector('.photo-container');
-        for (let i = 1; i <= 90; i++) {
+        for (let i = 1; i <= 19; i++) {
             const photoDiv = document.createElement('div');
             photoDiv.className = 'photo';
             photoDiv.id = `photo${i}`;
-            photoDiv.style.backgroundImage = `url('photos/${i}.jpg')`;
+            photoDiv.style.backgroundImage = `url('birth/${i}.jpg')`;
             photoDiv.style.zIndex = i;
             photoContainer.appendChild(photoDiv);
         }
@@ -238,7 +238,7 @@
     const passwordInput = document.getElementById('passwordInput');
     const passwordSubmit = document.getElementById('passwordSubmit');
     const body = document.body;
-    let photos = []; // 将photos声明提前
+    let birth = []; // 将birth声明提前
     let currentPhotoIndex = 0;
     let photoInterval; // 用于存储轮播定时器
 
@@ -255,11 +255,11 @@
             body.style.background = 'radial-gradient(circle at center, #f8c5d0 0%, #f3a8b8 50%, #ee8ca0 100%)';
             
             // 获取照片元素并初始化轮播
-            photos = document.querySelectorAll('.photo');
-            photos.forEach(photo => {
+            birth = document.querySelectorAll('.photo');
+            birth.forEach(photo => {
                 photo.style.opacity = '0';
             });
-            photos[0].classList.add('enter');
+            birth[0].classList.add('enter');
             
             // 启动轮播定时器
             clearInterval(photoInterval); // 防止重复启动
@@ -396,17 +396,17 @@
     function showNextPhoto() {
         // 随机水平偏移增加视觉效果
         const randomOffset = (Math.random() - 0.5) * 100;
-        photos[currentPhotoIndex].style.left = `calc(50% + ${randomOffset}px)`;
+        birth[currentPhotoIndex].style.left = `calc(50% + ${randomOffset}px)`;
 
         // 移除当前照片的enter类
-        photos[currentPhotoIndex].classList.remove('enter');
+        birth[currentPhotoIndex].classList.remove('enter');
 
         // 更新索引
-        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+        currentPhotoIndex = (currentPhotoIndex + 1) % birth.length;
 
         // 添加enter类触发动画
         setTimeout(() => {
-            photos[currentPhotoIndex].classList.add('enter');
+            birth[currentPhotoIndex].classList.add('enter');
         }, 100); // 短暂延迟确保动画重置
     }
 

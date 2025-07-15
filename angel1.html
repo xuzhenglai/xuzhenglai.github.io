@@ -39,210 +39,204 @@
       height: 100%;
       position: absolute;
       transform-style: preserve-3d;
-      animation: rotateCube 10s infinite linear; /* 已恢复为原始速度 */
+      animation: rotateCube 10s infinite linear;
+      will-change: transform; /* 添加硬件加速 */
     }
 
     /* 每个面样式 */
-      .face {
-        position: absolute;
-        width: 500px;
-        height: 500px;
-        background: rgba(255, 255, 255, 0.3); /* 降低背景透明度至0.3 */
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        box-shadow: 
-          0 0 30px rgba(255, 255, 255, 0.7),
-          inset 0 0 30px rgba(255, 255, 255, 0.5);
-        line-height: 500px;
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-        transition: all 0.5s ease; /* 延长过渡时间至0.5秒 */
-      }
+    .face {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 
+        0 0 40px rgba(255, 255, 255, 0.9),
+        inset 0 0 40px rgba(255, 255, 255, 0.7);
+      line-height: 500px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+      transition: all 0.5s ease;
+      backface-visibility: visible;
+      will-change: transform, opacity; /* 添加硬件加速 */
+    }
 
-      /* 图片覆盖在每个面上 */
-      .face img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 0;
-        opacity: 0.5; /* 默认透明度增加到0.5 */
-        filter: brightness(1.0) contrast(1.0);
-        transition: all 0.5s ease; /* 延长过渡时间至0.5秒 */
-      }
+    /* 图片覆盖在每个面上 */
+    .face img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+      opacity: 0.7; /* 提高透明度 */
+      filter: brightness(1.0) contrast(1.0);
+      transition: all 0.5s ease;
+      backface-visibility: visible; /* 确保背面可见 */
+    }
 
-      /* 当立方体旋转到正面时突出显示图片 */
-      .cube:hover .face {
-        background: rgba(255, 255, 255, 0.1);
-      }
-      .cube:hover .face img {
-        opacity: 0.5; /* 保持非正面图片透明度 */
-        filter: brightness(1.0) contrast(1.0);
-      }
+    /* 当立方体旋转到正面时突出显示图片 */
+    .cube:hover .face {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .cube:hover .face img {
+      opacity: 0.5; /* 保持非正面图片透明度 */
+      filter: brightness(1.0) contrast(1.0);
+    }
       
-      /* 优化正面图片显示效果 */
-      .cube .face img {
-        opacity: 0.5;
-      }
-      .cube .face.front img {
-        opacity: 1; /* 正面图片透明度为1 */
-        filter: brightness(1.3) contrast(1.2); /* 提高正面图片亮度和对比度 */
-        box-shadow: 0 0 30px rgba(255,255,255,0.8); /* 添加光晕效果 */
-      }
+    /* 优化正面图片显示效果 */
+    .cube .face img {
+      opacity: 0.5;
+    }
+    .cube .face.front img {
+      opacity: 1; /* 正面图片透明度为1 */
+      filter: brightness(1.3) contrast(1.2); /* 提高正面图片亮度和对比度 */
+      box-shadow: 0 0 30px rgba(255,255,255,0.8); /* 添加光晕效果 */
+    }
 
-      /* 悬停效果优化 */
-      .face:hover img {
-        opacity: 0.7; /* 悬停时微调透明度 */
-        filter: brightness(1.1);
-      }
-      .face.front:hover img {
-        opacity: 1; /* 正面图片悬停时保持完全不透明 */
-        filter: brightness(1.5) contrast(1.3); /* 进一步提高亮度和对比度 */
-      }
+    /* 悬停效果优化 */
+    .face:hover img {
+      opacity: 0.7; /* 悬停时微调透明度 */
+      filter: brightness(1.1);
+    }
+    .face.front:hover img {
+      opacity: 1; /* 正面图片悬停时保持完全不透明 */
+      filter: brightness(1.5) contrast(1.3); /* 进一步提高亮度和对比度 */
+    }
 
-      /* 各个面位置定义 */
-      .front  { transform: translateZ(250px); }
-      .back   { transform: rotateY(180deg) translateZ(250px); }
-      .right  { transform: rotateY(90deg) translateZ(250px); }
-      .left   { transform: rotateY(-90deg) translateZ(250px); }
-      .top    { transform: rotateX(90deg) translateZ(250px); }
-      .bottom { transform: rotateX(-90deg) translateZ(250px); }
+    /* 各个面位置定义 - 修正旋转角度 */
+    .front  { transform: rotateY(0deg) translateZ(250px); }
+    .back   { transform: rotateY(180deg) translateZ(250px); }
+    .right  { transform: rotateY(90deg) translateZ(250px); }
+    .left   { transform: rotateY(-90deg) translateZ(250px); }
+    .top    { transform: rotateX(90deg) translateZ(250px); }
+    .bottom { transform: rotateX(-90deg) translateZ(250px); }
 
-      /* 优化后的9个中间面 */
-      .middle1 { transform: rotateY(45deg) rotateX(0deg) translateZ(250px); }
-      .middle2 { transform: rotateY(90deg) rotateX(45deg) translateZ(250px); }
-      .middle3 { transform: rotateY(135deg) rotateX(0deg) translateZ(250px); }
-      .middle4 { transform: rotateY(180deg) rotateX(45deg) translateZ(250px); }
-      .middle5 { transform: rotateY(225deg) rotateX(0deg) translateZ(250px); }
-      .middle6 { transform: rotateY(270deg) rotateX(45deg) translateZ(250px); }
-      .middle7 { transform: rotateY(315deg) rotateX(0deg) translateZ(250px); }
-      .middle8 { transform: rotateY(0deg) rotateX(45deg) translateZ(250px); }
-      .middle9 { transform: rotateY(0deg) rotateX(-45deg) translateZ(250px); }
+    /* 优化后的9个中间面 - 修正旋转角度 */
+    .middle1 { transform: rotateY(45deg) rotateX(0deg) translateZ(250px); }
+    .middle2 { transform: rotateY(90deg) rotateX(45deg) translateZ(250px); }
+    .middle3 { transform: rotateY(135deg) rotateX(0deg) translateZ(250px); }
+    .middle4 { transform: rotateY(180deg) rotateX(45deg) translateZ(250px); }
+    .middle5 { transform: rotateY(225deg) rotateX(0deg) translateZ(250px); }
+    .middle6 { transform: rotateY(270deg) rotateX(45deg) translateZ(250px); }
+    .middle7 { transform: rotateY(315deg) rotateX(0deg) translateZ(250px); }
+    .middle8 { transform: rotateY(0deg) rotateX(45deg) translateZ(250px); }
+    .middle9 { transform: rotateY(0deg) rotateX(-45deg) translateZ(250px); }
 
-      /* 立方体旋转动画 */
-      @keyframes rotateCube {
-        from { transform: rotateX(0deg) rotateY(0deg); }
-        to   { transform: rotateX(360deg) rotateY(360deg); }
+    /* 立方体旋转动画 */
+    @keyframes rotateCube {
+      from { transform: rotateX(0deg) rotateY(0deg); }
+      to   { transform: rotateX(360deg) rotateY(360deg); }
+    }
+
+    /* 气泡样式 */
+    .bubble-message {
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: 30px;
+      background-color: #fefefe;
+      padding: 15px 25px;
+      border-radius: 50%; /* 圆形 */
+      border: 1px solid #888;
+      animation: bubbleUp 2s ease-out forwards;
+      transform: translateX(-50%) scale(0.5);
+      transform-origin: center;
+      font-size: 16px;
+      color: #333;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      font-style: italic;
+    }
+
+    /* 气球样式优化 */
+    .balloon {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 105, 180, 0.8), rgba(255, 192, 203, 0.6));
+      z-index: 1000;
+      cursor: pointer;
+      animation: floatUp 4s ease-in forwards;
+      border-radius: 50%;
+      will-change: transform; /* 添加硬件加速 */
+    }
+
+    /* 简化气球尾巴样式 */
+    .balloon .tail {
+      position: absolute;
+      bottom: -40px;
+      left: 29px;
+      width: 2px;
+      height: 40px;
+      background: inherit;
+      opacity: 0.7;
+      z-index: -1;
+    }
+
+    /* 气球文字样式 */
+    .balloon-text {
+      display: none;
+      position: absolute;
+      transform: rotate(45deg);
+      width: 200px;
+      text-align: center;
+      font-size: 12px;
+      color: white;
+      text-shadow: 0 0 3px rgba(0,0,0,0.5);
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: rotate(45deg) scaleY(1.5) skewX(10deg); }
+      50% { transform: rotate(45deg) scaleY(1.5) skewX(-10deg); }
+    }
+
+    /* 气球上浮动画 */
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
       }
-
-      /* 气泡样式 */
-      .bubble-message {
-        position: fixed;
-        z-index: 1000;
-        left: 50%;
-        bottom: 30px;
-        background-color: #fefefe;
-        padding: 15px 25px;
-        border-radius: 50%; /* 圆形 */
-        border: 1px solid #888;
-        animation: bubbleUp 2s ease-out forwards;
-        transform: translateX(-50%) scale(0.5);
-        transform-origin: center;
-        font-size: 16px;
-        color: #333;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        font-style: italic;
+      100% {
+        transform: translateY(-100vh);
+        opacity: 0;
       }
+    }
 
-      /* 气球样式 */
-      .balloon {
-        position: fixed;
-        width: 60px;
-        height: 60px;
-        background: radial-gradient(circle at 30% 30%, rgba(255, 105, 180, 0.6), rgba(255, 192, 203, 0.4)); /* 降低透明度 */
-        z-index: 1000;
-        cursor: pointer;
-        animation: floatUp 4s ease-in forwards;
-        box-shadow: 
-          0 0 15px rgba(255, 105, 180, 0.7), /* 降低阴影透明度 */
-          inset 0 0 25px rgba(255, 192, 203, 0.5); /* 降低内阴影透明度 */
-        border: 1px solid rgba(255, 105, 180, 0.5); /* 降低边框透明度 */
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+    /* 烟花效果 */
+    .firework {
+      position: fixed;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.8);
+      animation: explode 0.8s ease-out forwards;
+      z-index: 1001;
+      background: transparent !important;
+    }
 
-      /* 修正波浪尾巴样式 */
-      .balloon .tail {
-        position: absolute;
-        bottom: -40px;  /* 加长尾巴 */
-        left: 29px;     /* 调整位置居中 */
-        width: 2px;     /* 改为细线 */
-        height: 40px;   /* 加长尾巴 */
-        background: inherit;
-        transform: none; /* 移除波浪形变换 */
-        filter: blur(1px);
-        opacity: 0.7;
-        z-index: -1;
-        border-radius: 0; /* 改为直线 */
-        animation: none;  /* 移除波浪动画 */
+    @keyframes explode {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 10px 3px currentColor;
       }
+      50% {
+        transform: scale(2);
+        box-shadow: 0 0 15px 5px currentColor;
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(30);
+        box-shadow: 0 0 20px 8px currentColor;
+        opacity: 0;
+      }
+    }
 
-      /* 气球文字样式 */
-      .balloon-text {
-        display: none;
-        position: absolute;
-        transform: rotate(45deg);
-        width: 200px;
-        text-align: center;
-        font-size: 12px;
-        color: white;
-        text-shadow: 0 0 3px rgba(0,0,0,0.5);
-      }
-
-      @keyframes wave {
-        0%, 100% { transform: rotate(45deg) scaleY(1.5) skewX(10deg); }
-        50% { transform: rotate(45deg) scaleY(1.5) skewX(-10deg); }
-      }
-
-      /* 气球上浮动画 */
-      @keyframes floatUp {
-        0% {
-          transform: translateY(0);
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(-100vh);
-          opacity: 0;
-        }
-      }
-
-      /* 烟花效果 */
-      .firework {
-        position: fixed;
-        width: 3px;
-        height: 3px;
-        border-radius: 50%;
-        box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.8);
-        animation: explode 0.8s ease-out forwards;
-        z-index: 1001;
-        background: transparent !important;
-      }
-
-      @keyframes explode {
-        0% {
-          transform: scale(1);
-          opacity: 1;
-          box-shadow: 0 0 10px 3px currentColor;
-        }
-        50% {
-          transform: scale(2);
-          box-shadow: 0 0 15px 5px currentColor;
-          opacity: 0.8;
-        }
-        100% {
-          transform: scale(30);
-          box-shadow: 0 0 20px 8px currentColor;
-          opacity: 0;
-        }
-      }
-
-      /* 气球爆炸效果修改为文字淡出 */
-      @keyframes fadeOut {
-        0% { opacity: 1; }
-        100% { opacity: 0; }
-      }
+    /* 气球爆炸效果修改为文字淡出 */
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
 
 /* 新增球形面样式 */
 .sphere-face {
@@ -372,74 +366,72 @@
     return firework;
   }
 
-  // 创建气球（优化版）
+  // 使用requestAnimationFrame优化动画
   function createBalloon(e) {
-    const balloon = getBalloonFromPool();
+    if (isAnimating) return; // 如果正在动画则跳过
     
-    // 设置气球位置和样式
-    balloon.style.left = `${e.clientX - 30}px`;
-    balloon.style.bottom = `${window.innerHeight - e.clientY}px`;
-    const colors = [
-      'rgba(255, 105, 180, 0.8)', // 粉色
-      'rgba(255, 20, 147, 0.8)',  // 深粉色
-      'rgba(219, 112, 147, 0.8)', // 淡紫色
-      'rgba(199, 21, 133, 0.8)',  // 紫红色
-      'rgba(255, 0, 127, 0.8)',   // 玫瑰红
-      'rgba(255, 215, 0, 0.8)',   // 金色
-      'rgba(0, 191, 255, 0.8)',   // 天蓝色
-      'rgba(50, 205, 50, 0.8)',   // 青绿色
-      'rgba(138, 43, 226, 0.8)'   // 紫罗兰色
-    ];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    balloon.style.background = `radial-gradient(circle at 30% 30%, ${color}, rgba(255, 255, 255, 0.6))`;
-    
-    // 添加情话文字
-    const quote = loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
-    balloon.innerHTML = `<div class="balloon-text">${quote}</div><div class="tail"></div>`;
-    
-    document.body.appendChild(balloon);
-    balloon.style.animation = 'floatUp 4s ease-in forwards';
-    
-    balloon.onclick = function(e) {
-      e.stopPropagation(); // 阻止事件冒泡
-      explodeBalloon(balloon);
-    };
+    requestAnimationFrame(() => {
+      isAnimating = true;
+      const balloon = getBalloonFromPool();
+      
+      // 设置气球位置和样式
+      balloon.style.left = `${e.clientX - 30}px`;
+      balloon.style.bottom = `${window.innerHeight - e.clientY}px`;
+      const colors = [
+        'rgba(255, 105, 180, 0.8)',
+        'rgba(255, 20, 147, 0.8)',
+        'rgba(219, 112, 147, 0.8)',
+        'rgba(199, 21, 133, 0.8)',
+      ];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      balloon.style.background = `radial-gradient(circle at 30% 30%, ${color}, rgba(255, 255, 255, 0.6))`;
+      
+      balloon.innerHTML = `<div class="balloon-text">${loveQuotes[Math.floor(Math.random() * loveQuotes.length)]}</div><div class="tail"></div>`;
+      
+      document.body.appendChild(balloon);
+      
+      balloon.onclick = function(e) {
+        e.stopPropagation();
+        requestAnimationFrame(() => {
+          explodeBalloon(balloon);
+          isAnimating = false;
+        });
+      };
+    });
   }
 
-  // 气球爆炸效果（简化版）
+  // 优化气球爆炸效果
   function explodeBalloon(balloon) {
-    // 显示文字
     const text = balloon.querySelector('.balloon-text');
     if (text) {
       text.style.display = 'block';
-      text.style.animation = 'fadeOut 3s forwards';
+      text.style.animation = 'fadeOut 1.5s forwards';
     }
     
-    // 移除气球
     setTimeout(() => {
-      balloon.style.animation = 'none';
       balloon.remove();
-    }, 3000); // 3秒后移除气球
+    }, 1500); // 缩短动画时间
   }
 
-  // 点击节流控制
+  // 优化点击节流控制
   let lastClickTime = 0;
+  let isAnimating = false; // 添加动画状态标志
+  
   window.onload = () => {
-    // 初始气球数量减少为10个
-    for (let i = 0; i < 10; i++) {
+    // 初始气球数量减少为3个
+    for (let i = 0; i < 3; i++) {
       setTimeout(() => {
         createBalloon({
           clientX: Math.random() * window.innerWidth,
           clientY: window.innerHeight
         });
-      }, i * 1000);
+      }, i * 800); // 增加间隔时间
     }
 
     document.addEventListener('click', (e) => {
-      // 只有当点击的对象是body或容器时才创建气球
       if (e.target === document.body || e.target.classList.contains('container')) {
         const now = Date.now();
-        if (now - lastClickTime > 300) { // 300ms节流控制
+        if (now - lastClickTime > 800) { // 增加节流时间
           createBalloon(e);
           lastClickTime = now;
         }
