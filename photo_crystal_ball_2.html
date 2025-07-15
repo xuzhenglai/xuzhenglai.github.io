@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐</title>
+    <style>
+        /* 新增浪漫背景样式 */
+        body {
+            background: radial-gradient(circle at center,
+            #f8c5d0 0%,
+            #f3a8b8 50%,
+            #ee8ca0 100%);
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* 情话气泡样式优化 - 修改为气球样式 */
+        .love-bubble {
+            position: fixed;
+            bottom: -50px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 224, 236, 0.5) 50%,
+            rgba(255, 192, 203, 0.3) 100%);
+            border-radius: 50%;
+            animation: float-bubble 4s linear forwards;  /* 修正动画名称 */
+            opacity: 0;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #FFA500; /* 橙色文字 */
+            font-size: 14px;
+            padding: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 添加气球尾巴 */
+        .love-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom,
+            rgba(255, 192, 203, 0.8),
+            rgba(255, 255, 255, 0.5));
+            border-radius: 2px;
+        }
+
+        /* 优化气泡上升动画 */
+        @keyframes float-bubble {
+            0% {
+                transform: translateY(0) scale(0.3);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* 照片样式优化 */
+        .photo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 250px;
+            border: 4px solid rgba(255, 224, 236, 0.7);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            border-radius: 15px;
+            z-index: 10;
+        }
+
+        /* 优化照片进入动画 */
+        .photo.enter {
+            animation: photo-bubble 3s cubic-bezier(0.21, 0.61, 0.35, 1) forwards;
+        }
+
+        @keyframes photo-bubble {
+            0% {
+                transform: translate(-50%, -50%) translateY(100vh) scale(0.3);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.8;
+            }
+            85% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 优化泡泡样式 */
+        .bubble {
+            position: fixed;
+            bottom: -50px;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 224, 236, 0.5) 50%,
+            rgba(255, 192, 203, 0.3) 100%);
+            border-radius: 50%;
+            animation: float-bubble 6s linear forwards;
+            opacity: 0;
+            z-index: 5;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* 添加伪元素实现高光 */
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 20%;
+            height: 20%;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+
+        @keyframes float-bubble {
+            0% {
+                transform: translateY(0) scale(0.3);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="photo-container">
+    <!-- 情话气泡容器 -->
+    <div id="bubble-container"></div>
+
+    <!-- 照片元素 -->
+    <div class="photo" id="photo1" style="background-image: url('photos/1.jpg'); z-index: 1;"></div>
+    <div class="photo" id="photo2" style="background-image: url('photos/2.jpg'); z-index: 2;"></div>
+    <div class="photo" id="photo3" style="background-image: url('photos/3.jpg'); z-index: 3;"></div>
+    <div class="photo" id="photo4" style="background-image: url('photos/4.jpg'); z-index: 4;"></div>
+    <div class="photo" id="photo5" style="background-image: url('photos/5.jpg'); z-index: 5;"></div>
+    <div class="photo" id="photo6" style="background-image: url('photos/6.jpg'); z-index: 6;"></div>
+    <div class="photo" id="photo7" style="background-image: url('photos/7.jpg'); z-index: 7;"></div>
+    <div class="photo" id="photo8" style="background-image: url('photos/8.jpg'); z-index: 8;"></div>
+    <div class="photo" id="photo9" style="background-image: url('photos/9.jpg'); z-index: 9;"></div>
+    <div class="photo" id="photo10" style="background-image: url('photos/10.jpg'); z-index: 10;"></div>
+    <div class="photo" id="photo11" style="background-image: url('photos/11.jpg'); z-index: 11;"></div>
+    <div class="photo" id="photo12" style="background-image: url('photos/12.jpg'); z-index: 12;"></div>
+    <div class="photo" id="photo13" style="background-image: url('photos/13.jpg'); z-index: 13;"></div>
+    <div class="photo" id="photo14" style="background-image: url('photos/14.jpg'); z-index: 14;"></div>
+</div>
+
+<script>
+    // 情话列表
+    const loveQuotes = [
+        "你是我生命的全部意义。",
+        "在这个世界上，除了你，我谁都不想要。",
+        "你的微笑照亮了我的世界。",
+        "我想和你一起走过每一个春夏秋冬。",
+        "你是我的唯一，永远不变。",
+        "每当我看到你，我的心都会跳动得更快。",
+        "我喜欢你，不是因为你是谁，而是因为在你面前我可以做自己。",
+        "即使在最黑暗的时刻，你也是我心中的光芒。",
+        "我愿意用一生去守护这份爱。",
+        "你就是我想要共度余生的那个人。",
+        "我爱你，从第一眼看见你到现在一直如此。",
+        "与你相遇是我生命中最美的意外。",
+        "没有你的日子就像失去了阳光。",
+        "你让我的生活变得丰富多彩。",
+        "我愿意为你放弃一切。",
+        "你是我心中最美的风景。",
+        "想你的时候，我会仰望天空，想象你在身边。",
+        "有你在的地方，就有幸福的气息。",
+        "你是我的梦中情人，现实中的挚爱。",
+        "只要能和你在一起，我就无所畏惧。"
+    ];
+
+    // 创建情话气泡优化 - 修改为水泡样式
+    function createLoveBubble() {
+        const bubble = document.createElement('div');
+        bubble.className = 'love-bubble';
+        bubble.textContent = loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
+
+        // 随机位置、大小和透明度
+        bubble.style.left = `${Math.random() * 80 + 10}%`;
+        const size = Math.random() * 40 + 80;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.opacity = Math.random() * 0.6 + 0.4;
+
+        document.body.appendChild(bubble);
+
+        // 确保动画结束后移除
+        const removeBubble = () => {
+            bubble.remove();
+            bubble.removeEventListener('animationend', removeBubble);
+        };
+        bubble.addEventListener('animationend', removeBubble);
+
+        // 5秒后强制移除兜底
+        setTimeout(() => {
+            if(document.body.contains(bubble)) {
+                bubble.remove();
+            }
+        }, 5000);
+    }
+
+    // 定时创建情话气泡
+    setInterval(createLoveBubble, 1000); // 每秒生成一个
+
+    // 优化泡泡创建函数
+    function createBubble() {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+
+        // 随机位置、大小和透明度
+        bubble.style.left = `${Math.random() * 100}%`;
+        const size = Math.random() * 25 + 10;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.opacity = Math.random() * 0.5 + 0.3;
+
+        document.body.appendChild(bubble);
+
+        // 动画结束后移除
+        bubble.addEventListener('animationend', () => {
+            bubble.remove();
+        });
+
+        // 兜底移除机制
+        setTimeout(() => {
+            if(document.body.contains(bubble)) {
+                bubble.remove();
+            }
+        }, 7000);
+    }
+
+    // 增加泡泡密度（每0.8秒一个）
+    setInterval(createBubble, 800);
+
+    // 照片轮播逻辑优化
+    const photos = document.querySelectorAll('.photo');
+    let currentPhotoIndex = 0;
+
+    function showNextPhoto() {
+        // 随机水平偏移增加视觉效果
+        const randomOffset = (Math.random() - 0.5) * 100;
+        photos[currentPhotoIndex].style.left = `calc(50% + ${randomOffset}px)`;
+
+        // 移除当前照片的enter类
+        photos[currentPhotoIndex].classList.remove('enter');
+
+        // 更新索引
+        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+
+        // 添加enter类触发动画
+        setTimeout(() => {
+            photos[currentPhotoIndex].classList.add('enter');
+        }, 100); // 短暂延迟确保动画重置
+    }
+
+    // 初始显示优化
+    window.addEventListener('load', () => {
+        // 所有照片初始隐藏
+        photos.forEach(photo => {
+            photo.style.opacity = '0';
+        });
+
+        // 显示第一张照片
+        photos[0].classList.add('enter');
+
+        // 优化轮播间隔
+        setInterval(showNextPhoto, 3000);
+    });
+</script>
+</body>
+</html>

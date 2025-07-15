@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>多面魔方</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      width: 100%;
+    }
+
+    /* 立方体容器 */
+    .cube-container {
+      width: 500px;
+      height: 500px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      perspective: 1200px;
+      cursor: pointer;
+      transform-style: preserve-3d; /* 新增此行以确保3D变换生效 */
+    }
+
+    /* 立方体结构 */
+    .cube {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      animation: rotateCube 10s infinite linear; /* 已恢复为原始速度 */
+    }
+
+    /* 每个面样式 */
+      .face {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 2px solid #fff;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        line-height: 500px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+      }
+
+      /* 各个面位置定义 */
+      .front  { transform: translateZ(250px); }
+      .back   { transform: rotateY(180deg) translateZ(250px); }
+      .right  { transform: rotateY(90deg) translateZ(250px); }
+      .left   { transform: rotateY(-90deg) translateZ(250px); }
+      .top    { transform: rotateX(90deg) translateZ(250px); }
+      .bottom { transform: rotateX(-90deg) translateZ(250px); }
+
+      /* 新增的8个中间面 */
+      .middle1 { transform: rotateY(45deg) translateZ(250px); }
+      .middle2 { transform: rotateY(135deg) translateZ(250px); }
+      .middle3 { transform: rotateY(225deg) translateZ(250px); }
+      .middle4 { transform: rotateY(315deg) translateZ(250px); }
+      .middle5 { transform: rotateX(45deg) rotateY(45deg) translateZ(250px); }
+      .middle6 { transform: rotateX(45deg) rotateY(135deg) translateZ(250px); }
+      .middle7 { transform: rotateX(45deg) rotateY(225deg) translateZ(250px); }
+      .middle8 { transform: rotateX(45deg) rotateY(315deg) translateZ(250px); }
+
+      /* 图片覆盖在每个面上 */
+      .face img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0;
+      }
+
+      /* 立方体旋转动画 */
+      @keyframes rotateCube {
+        from { transform: rotateX(0deg) rotateY(0deg); }
+        to   { transform: rotateX(360deg) rotateY(360deg); }
+      }
+
+      /* 气泡样式 */
+      .bubble-message {
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        bottom: 30px;
+        background-color: #fefefe;
+        padding: 15px 25px;
+        border-radius: 50%; /* 圆形 */
+        border: 1px solid #888;
+        animation: bubbleUp 2s ease-out forwards;
+        transform: translateX(-50%) scale(0.5);
+        transform-origin: center;
+        font-size: 16px;
+        color: #333;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        font-style: italic;
+      }
+
+      /* 气泡上浮并消失动画 */
+      @keyframes bubbleUp {
+        0% {
+          transform: translateY(100px) scale(0.5);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-100px) scale(1.5);
+          opacity: 0;
+        }
+      }
+
+/* 新增球形面样式 */
+.sphere-face {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  line-height: 500px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+/* 定义球面上不同面的位置 */
+.sphere-face:nth-child(1) { transform: rotateY(0deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(2) { transform: rotateY(36deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(3) { transform: rotateY(72deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(4) { transform: rotateY(108deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(5) { transform: rotateY(144deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(6) { transform: rotateY(180deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(7) { transform: rotateY(216deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(8) { transform: rotateY(252deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(9) { transform: rotateY(288deg) rotateX(0deg) translateZ(250px); }
+.sphere-face:nth-child(10) { transform: rotateY(324deg) rotateX(0deg) translateZ(250px); }
+
+/* 球体旋转动画 */
+@keyframes rotateSphere {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to   { transform: rotateX(360deg) rotateY(360deg); }
+}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>多面魔方水晶球</h1>
+
+  <div class="cube-container">
+    <div class="cube" id="photoCube">
+      <!-- 前 -->
+      <div class="face front"><img src="photos/1.jpg" alt=""></div>
+      <!-- 后 -->
+      <div class="face back"><img src="photos/2.jpg" alt=""></div>
+      <!-- 右 -->
+      <div class="face right"><img src="photos/3.jpg" alt=""></div>
+      <!-- 左 -->
+      <div class="face left"><img src="photos/4.jpg" alt=""></div>
+      <!-- 上 -->
+      <div class="face top"><img src="photos/5.jpg" alt=""></div>
+      <!-- 下 -->
+      <div class="face bottom"><img src="photos/6.jpg" alt=""></div>
+      <!-- 新增的8个中间面 -->
+      <div class="face middle1"><img src="photos/7.jpg" alt=""></div>
+      <div class="face middle2"><img src="photos/8.jpg" alt=""></div>
+      <div class="face middle3"><img src="photos/9.jpg" alt=""></div>
+      <div class="face middle4"><img src="photos/10.jpg" alt=""></div>
+      <div class="face middle5"><img src="photos/11.jpg" alt=""></div>
+      <div class="face middle6"><img src="photos/12.jpg" alt=""></div>
+      <div class="face middle7"><img src="photos/13.jpg" alt=""></div>
+      <div class="face middle8"><img src="photos/14.jpg" alt=""></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 浪漫情话列表
+  const loveMessages = [
+    "你是我生命的全部意义，每一刻与你共度的时光都是永恒。",
+    "在浩瀚宇宙中，我只为你闪耀；在这无尽星河里，我只愿与你同行。",
+    "你的微笑是我每天最渴望看到的风景，你的声音是我每夜最想听到的旋律。",
+    "即使世界末日来临，我也会紧紧握住你的手，与你一同面对最后的时刻。",
+    "你是我的唯一，就像星辰离不开夜空，就像花朵离不开春天。",
+    "遇见你之前，我的世界是黑白的；遇见你之后，我的世界变得五彩斑斓。",
+    "我想和你一起走过每一个春夏秋冬，让岁月见证我们的爱情。",
+    "你的眼睛像星星一样明亮，照亮了我内心最深处的幸福。",
+    "无论未来路有多长，我都愿意牵着你的手，永不放开。",
+    "你是我心中的完美，比所有诗篇中的浪漫还要动人。",
+    "我想把整个宇宙最闪亮的星星都摘下来送给你，因为你是我的星辰大海。",
+    "在你怀里，我找到了世界上最温暖的港湾。",
+    "每一次呼吸都在想着你，每一滴血液都在呼唤着你。",
+    "如果有来生，我还想再次遇见你，再次爱上你。",
+    "你是我心中永远的女神，是我此生最美的邂逅。",
+    "我可以为你忘记所有烦恼，因为你就是我最好的避风港。",
+    "爱你一万年不变，哪怕命运让我们暂时分开，我的心也永远属于你。",
+    "就算时光老去，我也要拉着你的手，一起走到世界的尽头。",
+    "你是我梦中最美的风景，是我醒时最大的幸福。",
+    "我要用一生的时间证明，我对你的爱永远不会改变。"
+  ];
+
+  // 随机获取一句情话
+  function getRandomMessage() {
+    const randomIndex = Math.floor(Math.random() * loveMessages.length);
+    return loveMessages[randomIndex];
+  }
+
+  // 动态创建气泡消息
+  function showLoveMessage() {
+    const container = document.querySelector('.container');
+    const randomMessage = getRandomMessage();
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble-message';
+    bubble.textContent = randomMessage;
+
+    container.appendChild(bubble);
+
+    // 动画结束后自动移除气泡
+    bubble.addEventListener('animationend', () => {
+      bubble.remove();
+    });
+  }
+
+  // 页面加载完成后启动自动情话弹出
+  window.onload = () => {
+    setInterval(() => {
+      showLoveMessage();
+    }, 1000);
+  };
+</script>
+</body>
+</html>
